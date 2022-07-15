@@ -22,7 +22,7 @@ const ExpenseForm = ({ onSaveExpenseData, onClickCloseForm }) => {
     }));
   };
   const amountChangeHandler = (e) => {
-    setUserInput((prev) => ({ ...prev, amount: e.target.value }));
+    setUserInput((prev) => ({ ...prev, amount: +e.target.value }));
     // setUserInput(e.target.value); // this value is always a string.. NOTE
   };
   const submitHandler = (e) => {

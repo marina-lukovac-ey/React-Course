@@ -15,11 +15,12 @@ const ExpensesChart = ({ expenses }) => {
     { label: "Nov", value: 0 },
     { label: "Dec", value: 0 },
   ];
-  for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-    array.forEach((element) => {});
+  for (const expense of expenses) {
+    const expenseMonth = expense.date.getMonth(); //starting from 0
+    chartDataPoints[expenseMonth].value += expense.amount; //bracket notation... great use
   }
+  console.log(chartDataPoints);
   //go through all the diff expenses:
-  return <Chart />;
+  return <Chart dataPoints={chartDataPoints} />;
 };
 export default ExpensesChart;

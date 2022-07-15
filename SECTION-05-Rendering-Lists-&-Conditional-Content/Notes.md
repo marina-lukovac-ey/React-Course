@@ -69,4 +69,24 @@
 
 ## ADDING DYNAMIC STYLES:
 
--
+```
+style={{backgroundColor: value}};
+style={{'background-color': value}};
+```
+
+Promisi- u job queue... Ide pre Message queue-a..
+sta se sve prosledjuje, i sta ima prednost???
+Redosled???
+reject(); se ponasa od Promise.reject() ...
+
+### GRANULACIJA...
+
+- CONDICIONALNI PRIKAZ...
+- Razbijanje na logicke celine...
+- Ima smisla iz pogleda sire slike
+
+### COMPOZICIJA
+
+- REACT RENDEROVANJE...
+- MEMIZATION>>> sta se renderuje, sta ide u kes, itd...
+- +string ==> number

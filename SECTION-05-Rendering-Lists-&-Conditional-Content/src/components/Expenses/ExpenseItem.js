@@ -1,17 +1,17 @@
 import Card from "../UI/Card";
 import "./ExpenseItem.css";
 import ExpenseDate from "./ExpenseDate";
-import { useState } from "react";
+// import { useState } from "react";
 
-function ExpenseItem(props) {
-  const [title, setTitle] = useState(props.title);
-  const [amount, setAmount] = useState(props.amount);
-  const [date, setDate] = useState(props.date);
+function ExpenseItem({ title, date, amount }) {
+  // const [title, setTitle] = useState(props.title);
+  // const [amount, setAmount] = useState(props.amount);
+  // const [date, setDate] = useState(props.date);
   //every component has its own state // per component instance
-  const clickHandler = () => {
-    setTitle("Changed title");
-    console.log(title); //this is not changed value because the function didn't reexecute before this came to exectuion
-  };
+  // const clickHandler = () => {
+  //   setTitle("Changed title");
+  //   console.log(title); //this is not changed value because the function didn't reexecute before this came to exectuion
+  // };
   //props object... destructured...
   return (
     <li>
@@ -21,7 +21,6 @@ function ExpenseItem(props) {
           <h2>{title}</h2>
           <div className="expense-item__price">${amount}</div>
         </div>
-        <button onClick={clickHandler}>Change Title</button>
       </Card>
     </li>
   );

@@ -1,9 +1,10 @@
-import "ChartBar.css";
+import "./ChartBar.css";
 
 const ChartBar = ({ value, label, maxValue }) => {
   //for each month in the year
   let barFillHeight = "0%";
-  if (props.maxValue > 0) {
+  if (maxValue > 0) {
+    //in percentage...
     barFillHeight = Math.round((value / maxValue) * 100) + "%";
   }
   return (
