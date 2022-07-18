@@ -16,7 +16,11 @@ function AddUser({ setUsers, setShowModal }) {
     if (validate.pass) {
       setUsers((prev) => [{ name: inputName, age: inputAge }, ...prev]);
     } else {
-      setShowModal({ show: true, message: validate.message });
+      setShowModal({
+        show: true,
+        message: validate.message,
+        title: validate.title,
+      });
     }
     setInputAge("");
     setInputName("");

@@ -5,14 +5,18 @@ function ErrorModal(props) {
     <div className={styles.backdrop}>
       <div className={styles.modal}>
         <div className={styles.header}>
-          <h2>Invalid Input</h2>
+          <h2>{props.showModal.title}</h2>
         </div>
         <div className={styles.content}>
-          <p>{props.message}</p>
+          <p>{props.showModal.message}</p>
           <div className={styles.actions}>
             <Button
               onClick={() => {
-                props.setShowModal({ show: false, message: "" });
+                props.setShowModal({
+                  show: false,
+                  message: "",
+                  title: "",
+                });
               }}
             >
               Okay

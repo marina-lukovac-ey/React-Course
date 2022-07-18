@@ -7,13 +7,14 @@ function App() {
   const [users, setUsers] = useState([{ name: "Max", age: 31 }]);
   const [showModal, setShowModal] = useState({
     show: false,
+    title: "",
     message: "",
   });
 
   return (
     <div>
       {showModal.show && (
-        <ErrorModal message={showModal.message} setShowModal={setShowModal} />
+        <ErrorModal showModal={showModal} setShowModal={setShowModal} />
       )}
       <AddUser setUsers={setUsers} setShowModal={setShowModal} />
       {users.length && <UsersList users={users} />}

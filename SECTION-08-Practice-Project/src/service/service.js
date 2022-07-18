@@ -5,11 +5,16 @@ const validateData = (name, age) => {
     return {
       pass: false,
       message: "Please enter a valid name and age (non-empty values)",
+      title: "Invalid Input",
     };
   } else if (+tempAge <= 0) {
-    return { pass: false, message: "Please enter a valid age (>0)" };
+    return {
+      pass: false,
+      message: "Please enter a valid age (>0)",
+      title: "Invalid Age",
+    };
   } else {
-    return { pass: true, message: "" };
+    return { pass: true, message: "", title: "" };
   }
 };
 
