@@ -13,3 +13,20 @@
 
 1. What goes to UI
 2. What goes to Together...
+3. Error Modal:
+
+   - setShowModal
+   - showModal
+
+   is it better practice to create callback
+   or to pass state and setState
+
+Sum total:
+
+- styled-components //
+- SCSS moduli //pokemoni
+- LESS
+- Goal: razumeti strukturu...
+- CSS ...
+
+- TC Serbia Town Hall

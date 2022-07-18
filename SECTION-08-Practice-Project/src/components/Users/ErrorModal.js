@@ -1,18 +1,18 @@
 import Button from "../UI/Button";
 import styles from "./ErrorModal.module.css";
-function ErrorModal(props) {
+function ErrorModal({ showModal, setShowModal }) {
   return (
     <div className={styles.backdrop}>
       <div className={styles.modal}>
         <div className={styles.header}>
-          <h2>{props.showModal.title}</h2>
+          <h2>{showModal.title}</h2>
         </div>
         <div className={styles.content}>
-          <p>{props.showModal.message}</p>
+          <p>{showModal.message}</p>
           <div className={styles.actions}>
             <Button
               onClick={() => {
-                props.setShowModal({
+                setShowModal({
                   show: false,
                   message: "",
                   title: "",
