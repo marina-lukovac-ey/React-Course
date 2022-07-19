@@ -153,3 +153,179 @@ const [state,dispatch]= useReducer(reducerFn, initialState,initFn)
 #### i.e: combining the enteredEmai and emailIsValid into single state...
 
 ---
+
+Reducer function can be declared completely outside the component function... React does the passing and calling the function on dispatched action
+
+```
+const emailReducer = (state,action) => {
+  if(action.type ==='USER_INPUT'){
+    return {value: action.payload,isValid: action.payload.includes('@')}
+  }
+  if(action.type ==='USER_BLUR'){ //check if state.value is valid
+    return { value: state.value, isValid: state.value.includes('@') }
+  }
+}
+const passwordReducer = (state,action) => {
+  if(action.type ==='USER_INPUT'){
+    return {value: action.payload,isValid: action.payload.trim().length >6}
+  }
+  if(action.type ==='USER_BLUR'){ //check if state.value is valid
+    return { value: state.value, isValid: state.valuetrim().length >6}
+  }
+}
+
+function Login(){
+
+  const [emailState,dispatchEmail]=useReducer(emailReducer, {value:'',isValid:false})
+
+  //call dispatch somewhere
+  const emailHandler =(e)=>{
+    dispatchEmail({type: 'USER_INPUT', payload: e.target.value})
+  }
+  //call dispatch for the second action...
+  const validateEmailHandler =()=>{
+    dispatchEmail({type: 'USER_BLUR'}) //no need for payload
+  }
+}
+```
+
+### Adding Nested Properties of a STATE As Dependencies To useEffect
+
+---
+
+```
+const { someProperty } = someObject;
+useEffect(() => {
+  // code that only uses someProperty ...
+}, [someProperty]);
+```
+
+### USE REDUCER VS. USE STATE...
+
+---
+
+### useState()
+
+---
+
+> useState ===> main state management system\
+> independent pieces of state/data\
+> great if state updates are easy and limited to a few kinds of updates
+
+### useReducer()
+
+---
+
+> great if you need more power, with previous state snapshots
+> related state of data if you have related pieces of state/data
+> can be helpful if there is a more complex state updates
+
+## REACT CONTEXT:
+
+---
+
+**_Only use it when passing through multiple components_**
+
+> when there is a lot of passing props throughout the application\
+>
+> - create new folder inside components folder: state, store, context\
+> - add file that is holding i.e the authentication state
+
+```
+const AuthContext = React.createContext({isLoggedIn: false});
+```
+
+this function returns object that will contain component...
+//provide to ===> all components that should listen to the context
+//listen to ===> from all components that need access to that context
+
+## 1. using Context.Provider - Context.Consumer
+
+---
+
+### Context Providing with react context:
+
+---
+
+`<AuthContext.Provider value={{ isLoggedIn: isLoggedIn }}>` // on every change of isLoggedIn state, isLoggedIn on a AuthContext is changed so... data is up to date
+
+### Consumer accessing with react context
+
+---
+
+```
+<AuthContext.Consumer>
+  {ctx => <component>ctx.isLoggedIn</component>}
+```
+
+is a component that wraps component that needs to listen to the provided context
+
+## 2. using useContext() hook
+
+---
+
+> do the <AuthContext.Provider> part
+> in the component where neccessary:
+
+```
+const ctx = useContext(AuthContext);
+```
+
+### MAX APPROACH OF ELEVATING CONTEXT TO index.js
+
+---
+
+**_Pro tip: always lean and clean App.js_**\
+index.js\
+
+```
+<AuthContextProvider>
+    <App />
+  </AuthContextProvider>
+```
+
+App.js\
+
+```
+function App() {
+  const ctx = useContext(AuthContext);
+  return (
+    <React.Fragment>
+      <MainHeader />
+      <main>
+        {!ctx.isLoggedIn && <Login />}
+        {ctx.isLoggedIn && <Home />}
+      </main>
+    </React.Fragment>
+  );
+}
+```
+
+### CONTEXT LIMITATIONS:
+
+> somewhere props for configuration\
+> React Context is NOT optimized for high frequency changes!\
+> should not be used for replacing ALL components communications and props
+
+## RULES OF HOOKS:
+
+---
+
+1. Only call React Hooks in React Functions:
+
+- React Component Functions
+- Custom Hooks
+  \
+
+2. Only call React Hooks at the Top Level:
+
+- don't call React Hooks in nested functions
+- don't call React Hooks in any block statements
+
+3. useEffect():
+
+- make sure to add everything you refer to as a dependency!
+
+### REFACTORING INPUT ELEMENT, so it receives all through props:
+
+---
