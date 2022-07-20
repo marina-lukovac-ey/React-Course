@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useReducer,
-  useContext,
-  useRef,
-} from "react";
+import React, { useEffect, useState, useReducer, useContext } from "react";
 import { emailReducer, passwordReducer } from "../../service";
 import classes from "./Login.module.css";
 
@@ -13,7 +7,7 @@ import Button from "../UI/Button/Button";
 import Input from "../UI/Input/Input";
 import AuthContext from "../store/auth-context";
 
-const Login = () => {
+const Login = (props) => {
   //since formIsValid is related, might have an idea to put it together with email and password reducer, but it is not optimal
   const [formIsValid, setFormIsValid] = useState(false);
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
@@ -33,8 +27,20 @@ const Login = () => {
   const { isValid: emailIsValid } = emailState;
   const { isValid: passwordIsValid } = passwordState;
 
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
+  useEffect(() => {
+    //debouncing method: checking only when user makes a pause
+    const timer = setTimeout(() => {
+      setFormIsValid(emailIsValid && passwordIsValid);
+      console.log("checking form validity");
+    }, 500);
+    return () => {
+      //cleanup function, everytime a useEffect runs,
+      //except for the first...
+      //Runs before every time a useEffect is reecexuted, and before it is removed...
+      console.log("cleanup");
+      clearTimeout(timer);
+    };
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
@@ -54,29 +60,9 @@ const Login = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if (formIsValid) {
-      ctx.onLogin(emailState.value, passwordState.value);
-    } else if (!emailIsValid) {
-      emailInputRef.current.focus();
-    } else {
-      passwordInputRef.current.focus();
-    }
+    ctx.onLogin(emailState.value, passwordState.value);
   };
 
-  useEffect(() => {
-    //debouncing method: checking only when user makes a pause
-    const timer = setTimeout(() => {
-      setFormIsValid(emailIsValid && passwordIsValid);
-      console.log("checking form validity");
-    }, 500);
-    return () => {
-      //cleanup function, everytime a useEffect runs,
-      //except for the first...
-      //Runs before every time a useEffect is reecexuted, and before it is removed...
-      console.log("cleanup");
-      clearTimeout(timer);
-    };
-  }, [emailIsValid, passwordIsValid]);
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
@@ -88,7 +74,6 @@ const Login = () => {
           value={emailState.value}
           onChangeHandler={emailChangeHandler}
           onBlurHandler={validateEmailHandler}
-          ref={emailInputRef}
         />
         <Input
           isValid={passwordIsValid}
@@ -98,10 +83,9 @@ const Login = () => {
           value={passwordState.value}
           onChangeHandler={passwordChangeHandler}
           onBlurHandler={validatePasswordHandler}
-          ref={passwordInputRef}
         />
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn}>
+          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
           </Button>
         </div>

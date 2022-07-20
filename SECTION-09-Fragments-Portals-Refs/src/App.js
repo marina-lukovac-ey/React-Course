@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import AddUser from "./components/Users/AddUser";
-import ErrorModal from "./components/Users/ErrorModal";
 import UsersList from "./components/DisplayUsers/UsersList";
 
 function App() {

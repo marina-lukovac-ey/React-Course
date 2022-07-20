@@ -27,11 +27,9 @@ function AddUser({ setUsers, setShowModal }) {
   };
   const onNameChangeInput = (e) => {
     setInputName(e.target.value);
-    console.log(e.target.value);
   };
   const onAgeChangeInput = (e) => {
     setInputAge(e.target.value);
-    console.log(e.target.value);
   };
   return (
     <Card className={classes.input}>

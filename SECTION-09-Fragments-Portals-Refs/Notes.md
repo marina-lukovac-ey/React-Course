@@ -76,7 +76,7 @@ function App(){
 }
 ```
 
-This error reocurrs:
+This error keeps reocurring:
 
 Uncaught ReferenceError: process is not defined
 at 4043 (<anonymous>:2:13168)

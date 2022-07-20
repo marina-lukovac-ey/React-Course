@@ -329,3 +329,37 @@ function App() {
 ### REFACTORING INPUT ELEMENT, so it receives all through props:
 
 ---
+
+### Putting ref on custom Input component in order to:
+
+### make Input component able to be bound to ref...
+
+- onClick Login button, place focus on the first invalid input element
+- using useImperativeHandle: not through props or refs, but inheritally programmatically
+
+####useImperativeHandle
+
+---
+
+```
+
+const Input = React.forwardRef(({...props}, ref)=>
+const inputRef = useRef();
+const activate = ()=>{
+  inputRef.current.focus();
+}
+useImperativeHandle(ref,()=>{
+ return {
+   focus: activate
+ }
+
+ return
+ <input ref ={inputRef}>
+}))
+
+//login.js
+
+emailInputRef.activate();
+```
+
+_`Using React.forwardRef((props,ref)=>{ useImperativeHandle(ref,()=>{focus:activateFn})})`//to expose child component to parent component by using useImperativeHandle and calling => inputRef.current.focus() inside of a parent component_
