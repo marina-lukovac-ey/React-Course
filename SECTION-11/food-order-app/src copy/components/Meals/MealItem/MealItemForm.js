@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ShoppingCartContext } from "../../store/shopping-cart-context";
 import formStyle from "./MealItemForm.module.css";
 
-function MealItemForm({ item, addtoCart }) {
+function MealItemForm({ item }) {
   const [inputAmount, setInputAmount] = useState(1);
+  const ctx = useContext(ShoppingCartContext);
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    addtoCart(item.id, inputAmount, item.price, item.title);
+    console.log("submit");
+    ctx.addToShoppingCart({ ...item, amount: +inputAmount });
   };
 
   const onChangeAmountHandler = (e) => {
+    console.log("amount handler");
     setInputAmount(e.target.value);
   };
   return (

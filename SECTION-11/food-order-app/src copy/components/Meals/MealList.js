@@ -34,12 +34,14 @@ const DUMMY_DATA = [
     availableAmount: 10,
   },
 ];
-const MealList = ({ items, addToCart }) => {
+const MealList = () => {
+  const [items, setItems] = useState(DUMMY_DATA);
+  //import list items from context
   return (
     <div className={`${classes.card} ${classes.meals}`}>
       <ul>
         {items.map((item) => (
-          <MealItem key={item.id} item={item} addToCart={addToCart} />
+          <MealItem key={item.id} item={item} />
         ))}
       </ul>
       {/* place cart here so there is accessibility to setItems */}
