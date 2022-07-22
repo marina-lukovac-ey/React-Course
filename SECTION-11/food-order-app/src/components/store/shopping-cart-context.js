@@ -1,12 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
+import { addToShoppingCartHandler } from "../service/helpers";
 
 export const ShoppingCartContext = React.createContext({
+  items: [],
   shoppingCart: [],
   badgeValue: 0,
-  showCart: false,
-  addToShoppingCart: () => {},
-  removeFromShoppingCart: () => {},
-  openShoppingCart: () => {},
+  dispatchShoppingCart: () => {},
   // placeAnOrder: () => {}, //add later
   // isLoggedIn: false, //add later
 });
@@ -15,67 +14,52 @@ export const ShoppingCartContext = React.createContext({
 //----------------------------------------------
 
 const ShoppingCartContextProvider = (props) => {
-  const [shoppingCart, setShoppingCart] = useState([]);
-  const [badgeValue, setBadgeValue] = useState(0);
-  // const [shoppingCartState,dispatchShoppingCart] = useReducer(shoppingCartReducer)
-  const [showCart, setShowCart] = useState(false);
   const [items, setItems] = useState([]);
+  const [shoppingCartState, dispatchShoppingCart] =
+    useReducer(shoppingCartReducer);
 
-  const addToShoppingCartHandler = ({ id, amount, price, title }) => {
-    setShoppingCart((prev) => {
-      let newItem = { id: id, amount: amount, price: price, title: title }; //until items' state is lifted here
-      if (!prev.length) return [newItem];
-
-      let index = prev.findIndex((el) => el.id === id);
-      if (index === -1) {
-        return [...prev, newItem];
-      } else {
-        let temp = [...prev];
-        temp.splice(index, 1, newItem);
-        temp[index].amount += amount;
-        return temp;
+  const shoppingCartReducer = (state, action) => {
+    if (action.body) {
+      //through action.body pass arguments, when dispatching
+      const { id, amount, price, title } = { ...action.body };
+      if (action.type === "ADD_TO_CART") {
+        return addToShoppingCartHandler(
+          id,
+          amount,
+          price,
+          title,
+          state,
+          setItems
+        );
+      } else if (action.type === "TAKE_FROM_CART") {
+        return {
+          /*--------------------------------------
+          -------------------------
+          Pending tasks: 
+          ------enter helpers.js and set logic for removeFromShoppingCardHandler-------
+          ------dispatch actions ADD_TO_CART and TAKE_FROM_CART
+          -----------------------------------*/
+          shoppingCart: removeFromShoppingCartHandler(id, state, setItems),
+        };
       }
-    });
-    setBadgeValue((prev) => {
-      return prev + +amount;
-    });
-  };
-  const openShoppingCartHandler = () => {
-    setShowCart((prev) => !prev);
+    }
+    return { shoppingCart: [], badgeValue: false };
   };
 
-  const removeFromShoppingCartHandler = (id) => {
-    setShoppingCart((prev) => {
-      let index = prev.findIndex((el) => el.id === id);
-      let item = { ...prev[index] };
-      let restItems = prev.filter((el) => el.id !== id);
-      if (item.amount === 1) {
-        return restItems;
-      } else {
-        return [...restItems, { ...item, amount: --item.amount }];
-      }
-    });
-  };
-
-  //later
-  ///*
   useEffect(() => {
     let shoppingCartStored =
       localStorage.getItem("SHOPPING_CART")?.JSON.parse() || [];
+    //fetchdata and check local storage Reminder!: remember to store shopping-cart data with: JSON.stringify()
     setShoppingCart(shoppingCartStored);
-    //fetchdata
-    setItems(DUMMY_DATA);
   }, []);
-  //*/
+
   return (
     <ShoppingCartContext.Provider
       value={{
-        shoppingCart: shoppingCart,
-        badgeValue: badgeValue,
-        showCart: showCart,
-        addToShoppingCart: addToShoppingCartHandler,
-        removeFromShoppingCart: removeFromShoppingCartHandler,
-        openShoppingCart: openShoppingCartHandler,
+        items: items,
+        shoppingCart: shoppingCartState.shoppingCart,
+        badgeValue: shoppingCartState.badgeValue,
+        dispatchShoppingCart: dispatchShoppingCart,
       }}
     >
       {props.children}
