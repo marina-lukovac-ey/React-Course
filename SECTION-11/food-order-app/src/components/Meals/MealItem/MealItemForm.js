@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import formStyle from "./MealItemForm.module.css";
 
-function MealItemForm({ item, addtoCart }) {
+function MealItemForm({ item }) {
   const [inputAmount, setInputAmount] = useState(1);
 
   const submitFormHandler = (e) => {

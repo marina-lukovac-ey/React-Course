@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 export const ShoppingCartContext = React.createContext({
   shoppingCart: [],
@@ -17,9 +17,9 @@ export const ShoppingCartContext = React.createContext({
 const ShoppingCartContextProvider = (props) => {
   const [shoppingCart, setShoppingCart] = useState([]);
   const [badgeValue, setBadgeValue] = useState(0);
+  // const [shoppingCartState,dispatchShoppingCart] = useReducer(shoppingCartReducer)
   const [showCart, setShowCart] = useState(false);
-  // /*
-  console.log(shoppingCart);
+  const [items, setItems] = useState([]);
 
   const addToShoppingCartHandler = ({ id, amount, price, title }) => {
     setShoppingCart((prev) => {
@@ -58,13 +58,15 @@ const ShoppingCartContextProvider = (props) => {
   };
 
   //later
-  /*
+  ///*
   useEffect(() => {
     let shoppingCartStored =
-    localStorage.getItem("SHOPPING_CART")?.JSON.parse() || [];
+      localStorage.getItem("SHOPPING_CART")?.JSON.parse() || [];
     setShoppingCart(shoppingCartStored);
+    //fetchdata
+    setItems(DUMMY_DATA);
   }, []);
-  */
+  //*/
   return (
     <ShoppingCartContext.Provider
       value={{
