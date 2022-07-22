@@ -1,5 +1,4 @@
-import React, { useReducer, useState } from "react";
-import { DUMMY_DATA, shoppingCartReducer } from "../service/helpers";
+```
 
 export const ShoppingCartContext = React.createContext({
   items: [],
@@ -8,11 +7,15 @@ export const ShoppingCartContext = React.createContext({
   shoppingCart: [],
   badgeValue: 0,
   dispatchShoppingCart: () => {},
+  // placeAnOrder: () => {}, //add later
+  // isLoggedIn: false, //add later
 });
+//later add logic for logged user an
+//and different possibilities for admin
+//----------------------------------------------
 
 const ShoppingCartContextProvider = (props) => {
-  const [items, setItems] = useState(DUMMY_DATA);
-  console.log("...the beginning");
+  const [items, setItems] = useState([]);
 
   const [shoppingCartState, dispatchShoppingCart] =
     useReducer(shoppingCartReducer);
@@ -23,6 +26,12 @@ const ShoppingCartContextProvider = (props) => {
   const takeFromItemsListHandler = (id, amount) => {
     setItems((prev) => decreaseAmountOfExisting(id, amount, prev));
   };
+  // useEffect(() => {
+  //   let shoppingCartStored =
+  //     localStorage.getItem("SHOPPING_CART")?.JSON.parse() || [];
+  //   //fetchdata and check local storage Reminder!: remember to store shopping-cart data with: JSON.stringify()
+  //   setShoppingCart(shoppingCartStored);
+  // }, []);
 
   return (
     <ShoppingCartContext.Provider
@@ -40,3 +49,4 @@ const ShoppingCartContextProvider = (props) => {
   );
 };
 export default ShoppingCartContextProvider;
+```

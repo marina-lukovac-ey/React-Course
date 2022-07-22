@@ -5,21 +5,29 @@ import CartItem from "./CartItem";
 import Modal from "../../UI/Modal/Modal";
 //create portal to body... (modal)
 
-function Cart() {
+function Cart({ openCloseCart }) {
   const ctx = useContext(ShoppingCartContext);
-  console.log(ctx.shoppingCart);
 
   return (
-    <Modal closeModal={ctx.openShoppingCart}>
-      <div className={classes.total}>
-        <h3>Total Amount:</h3>
-      </div>
+    <Modal closeModal={openCloseCart}>
       <ul className={classes[`cart-items`]}>
         {ctx.shoppingCart.length &&
           ctx.shoppingCart.map((item) => (
             <CartItem key={`$shopping-cart-${item.id}`} item={item} />
           ))}
       </ul>
+      <div className={classes.total}>
+        <h3>Total Amount:</h3>
+        <button className={classes.button} onClick={openCloseCart}>
+          Cancel
+        </button>
+        <button
+          className={`${classes.button} ${classes.actions}`}
+          onClick={openCloseCart}
+        >
+          Order
+        </button>
+      </div>
     </Modal>
   );
 }

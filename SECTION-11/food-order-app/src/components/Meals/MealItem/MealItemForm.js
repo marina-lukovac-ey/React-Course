@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ShoppingCartContext } from "../../store/shopping-cart-context";
 import formStyle from "./MealItemForm.module.css";
 
 function MealItemForm({ item }) {
-  const [inputAmount, setInputAmount] = useState(1);
-
+  const inputAmountNode = useRef();
+  const ctx = useContext(ShoppingCartContext);
   const submitFormHandler = (e) => {
     e.preventDefault();
-    addtoCart(item.id, inputAmount, item.price, item.title);
+    ctx.takeFromItemsList(item.id, inputAmountNode.current.value);
+    ctx.dispatchShoppingCart({
+      type: "ADD_TO_CART",
+      body: {
+        id: item.id,
+        amount: inputAmountNode.current.value,
+        price: item.price,
+        title: item.title,
+      },
+    });
   };
 
-  const onChangeAmountHandler = (e) => {
-    setInputAmount(e.target.value);
-  };
   return (
     <form className={formStyle.form} onSubmit={submitFormHandler}>
       <div className={formStyle.input}>
@@ -20,7 +27,7 @@ function MealItemForm({ item }) {
           type="number"
           value={inputAmount}
           max={item.amount}
-          onChange={onChangeAmountHandler}
+          ref={inputAmountNode}
         />
         {/* only used for display purposes */}
       </div>

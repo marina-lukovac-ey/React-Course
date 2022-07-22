@@ -1,4 +1,25 @@
+//Functions and dummy-data
 //purpose of these helpers is deepCopy without a library handling of a state
+//******************************* */
+//ReducerFn
+export const shoppingCartReducer = (state, action) => {
+  if (action.type === "ADD_TO_CART") {
+    return addToShoppingCartHandler(
+      action.body.id,
+      action.body.amount,
+      action.body.price,
+      action.body.title,
+      state
+    );
+  } else if (action.type === "TAKE_FROM_CART") {
+    return {
+      shoppingCart: removeFromShoppingCartHandler(action.body.id, state),
+    };
+  }
+
+  return { shoppingCart: [], badgeValue: false };
+};
+//shoppingCartAdd / Remove Logic
 export const addNewItem = (id, title, amount, price, array) => {
   return [
     array.map((el) => {
@@ -13,13 +34,13 @@ export const increaseAmountOfExisting = (id, amountIncrement, array) => {
     el.id === id ? { ...el, amount: el.amount + amountIncrement } : { ...el }
   );
 };
-export const decreaseAmountOfExistingIncrementally = (id, array) => {
+export const decreaseAmountOfExisting = (id, amount, array) => {
   return array.map((el) =>
-    el.id === id ? { ...el, amount: el.amount - 1 } : { ...el }
+    el.id === id ? { ...el, amount: el.amount - amount } : { ...el }
   );
 };
 export const removeCompletelyFromArray = (id, array) => {
-  return prev
+  return array
     .filter((el) => el.id !== id)
     .map((el) => {
       return { ...el };
@@ -31,22 +52,10 @@ export const addToShoppingCartHandler = ({
   price,
   title,
   state,
-  setItems,
 }) => {
   const shoppingCart = state.shoppingCart;
   const badgeValue = state.badgeValue + +amount;
 
-  //logic where items are set
-
-  setItems((prev) => {
-    if (prev[index].amount === 1) {
-      removeCompletelyFromArray(id, prev);
-    } else {
-      decreaseAmountOfExistingIncrementally(id, prev);
-    }
-  });
-
-  //logic where shoppingCartState is set
   let index = shoppingCart.findIndex((el) => el.id === id);
   if (!shoppingCart.length || index === -1) {
     return {
@@ -61,17 +70,22 @@ export const addToShoppingCartHandler = ({
   }
 };
 
-const removeFromShoppingCartHandler = (id, state, setItems) => {
-  setShoppingCart((prev) => {
-    let index = prev.findIndex((el) => el.id === id);
-    let item = { ...prev[index] };
-    let restItems = prev.filter((el) => el.id !== id);
-    if (item.amount === 1) {
-      return restItems;
-    } else {
-      return [...restItems, { ...item, amount: --item.amount }];
-    }
-  });
+export const removeFromShoppingCartHandler = (id, state) => {
+  const shoppingCart = state.shoppingCart;
+  const badgeValue = state.badgeValue + +amount;
+
+  let index = shoppingCart.findIndex((el) => el.id === id);
+  if (shoppingCart[index].amount === 1) {
+    return {
+      shoppingCart: removeCompletelyFromArray(id, shoppingCart),
+      badgeValue: badgeValue - 1,
+    };
+  } else {
+    return {
+      shoppingCart: decreaseAmountOfExistingIncrementally(id, shoppingCart),
+      badgeValue: badgeValue - 1,
+    };
+  }
 };
 export const DUMMY_DATA = [
   {
@@ -79,27 +93,27 @@ export const DUMMY_DATA = [
     title: "Sushi",
     description: "Finest fish and veggies",
     price: 22.99,
-    availableAmount: 14,
+    amount: 14,
   },
   {
     id: "m2",
     title: "Schnitzel",
     description: "A german specialty!",
     price: 16.5,
-    availableAmount: 5,
+    amount: 5,
   },
   {
     id: "m3",
     title: "Barbecue Burger",
     description: "American, raw, meaty",
     price: 12.99,
-    availableAmount: 2,
+    amount: 2,
   },
   {
     id: "m4",
     title: "Green Bowl",
     description: "Healthy...and green...",
     price: 18.99,
-    availableAmount: 10,
+    amount: 10,
   },
 ];

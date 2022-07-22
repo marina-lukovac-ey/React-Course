@@ -1,9 +1,8 @@
 import classes from "./Header.module.css";
 import mealsImage from "./meals.jpg";
-import CartButton from "./CartButton";
-import ShoppingCartContextProvider from "../store/shopping-cart-context";
 import { useState } from "react";
 import Cart from "./Cart/Cart";
+import CartButton from "./CartButton";
 
 const Header = () => {
   const [showCart, setShowCart] = useState(false);
@@ -19,7 +18,7 @@ const Header = () => {
       <div className={classes["main-image"]}>
         <img src={mealsImage} alt="Prepared food" />
       </div>
-      {showCart && <Cart />}
+      {showCart && <Cart openCloseCart={openShoppingCartHandler} />}
     </>
   );
 };
