@@ -96,7 +96,25 @@ const toggleParagraph = useCallback( () => setShowParagraph(prev => !prev), [arr
 
 - How react updates state management???
 - setNewProduct('Book') == > **_SCHEDULED STATE UPDATE_** //feels immediate but isn't
-- input field might have higher importance than text rendering...
+- input field might have higher priority than text rendering...
+- there is possibility for some state update to be postponed therefore
 - because of this scheduling state updates, the best practice is to use `setNew(prev=> !prev)` form
+- within useEffect can be used directly because:
+  - useEffect's dependencies make sure that inside useEffect is always getting the freshest state snapshot
+- **_BATCHING_** : when two setStates are called within a function handler... they are not taken separately and updated, but batched together and executed in a bundle...
 
-## OPTIMIZING WITH `useMemo()`
+### BATCH UPDATE DIGRESSION FROM COURSE:
+
+---
+
+[BATCHING](https://medium.com/swlh/react-state-batch-update-b1b61bd28cd2)
+
+## OPTIMIZING WITH `useMemo()`dddddd
+
+---
+
+- used for sorting logic, so it doesn't have to be redone every time a parent component or props change... - changes only when dependencies do
+
+```
+useMemo( ( ) => { return logicResult//like sorting array },  [listOfDependences//i.e. search word] )
+```

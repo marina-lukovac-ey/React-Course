@@ -1,31 +1,22 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import "./App.css";
-import DemoOutput from "./components/Demo/DemoOutput";
+import DemoList from "./components/Demo/DemoList";
 import Button from "./components/UI/Button/Button";
 
 function App() {
-  const [showParagraph, setShowParagraph] = useState(false);
-  const [allowToggle, setAllowToggle] = useState(false);
-  console.log("app running");
-  const toggleParagraphVisibility = useCallback(() => {
-    // when creating a functiono useCallback binds the value of allowtogle to false
-    //result: whenever a function is called, this value remains the same regardles of the state change
-    if (allowToggle) {
-      setShowParagraph((prev) => !prev);
-    }
-  }, [allowToggle]); //but if allowToggle is added to dependency array, it is being recreated each time its state changes
-  const allowToggleHandler = () => {
-    setAllowToggle(true);
-  };
+  const [listTitle, setListTitle] = useState("This is a list");
+  const [counter, setCounter] = useState(1);
+  const changeTitleHandler = useCallback(() => {
+    setCounter((prev) => prev + 1);
+    setListTitle("New Title" + counter);
+  }, []);
+  console.log("APP");
+  console.log(counter);
   return (
     <div className="app">
       <h1>Hi there!</h1>
-      <DemoOutput show={false} />
-      <Button onClick={allowToggleHandler}>Allow Toggling</Button>
-      <Button onClick={toggleParagraphVisibility}>
-        Toggle Paragraph
-        {/* {showParagraph ? "Hide Paragraph" : "Show Paragraph"} */}
-      </Button>
+      <DemoList title={listTitle} items={useMemo(() => [5, 3, 1, 10, 9], [])} />
+      <Button onClick={changeTitleHandler}>Change List Title</Button>
     </div>
   );
 }
