@@ -1,68 +1,105 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import MoviesList from "./components/MoviesList";
+import AddMovie from "./components/AddMovie";
 import "./App.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
 
   const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
-    setError("");
+    setError(null);
     try {
-      const response = await fetch("https://swapi.dev/api/films/");
+      const response = await fetch(
+        "https://react-http-cb3c6-default-rtdb.europe-west1.firebasedatabase.app/movies.json"
+      );
+      // if (!response.ok) {
+      //   throw new Error("Something went wrong!");
+      // }
 
-      if (!response.ok) {
-        //error handling depends on APIs
-        throw new Error("Something went wrong here!");
-      }
       const data = await response.json();
+      console.log(data);
+      const transformedMovies = [];
+      for (const key in data) {
+        transformedMovies.push({ id: key, ...data[key] });
+      }
 
-      const transformedMovies = data.results.map((movie) => {
-        return {
-          id: movie.episode_id,
-          title: movie.title,
-          openingText: movie.opening_crawl,
-        };
-      });
       setMovies(transformedMovies);
-      setIsLoading(false);
-    } catch (err) {
+    } catch (error) {
       setError(error.message);
     }
-    setIsLoading(false); //always setLoading to false, when done with it...
+    setIsLoading(false);
   }, []);
 
-  //make it refactored and not cluttered in the JSX
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
+
+  const addMovieHandler = async () => {
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://react-http-cb3c6-default-rtdb.europe-west1.firebasedatabase.app/movies.json",
+        {
+          mode: "no-cors",
+          method: "POST",
+          body: JSON.stringify({
+            title: "Movie title",
+            // id: "3286472",
+            release_date: "July 27 2022",
+            opening_crawl: "Once upon a time...",
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+        //db generated data:
+        //{"-N7yvHERZvQYD-DJzvvG":
+        //  {"opening_crawl":
+        //    "Once upon a time...",
+        //    "release_date":"July 27 2022",
+        //    "title":"Movie title"}}
+      );
+      if (response.type !== "opaque") {
+        throw new Error("post request is not ok");
+      }
+      console.log(response);
+      // const data = await response.json();
+      // console.log(data);
+    } catch (error) {
+      setError(error.message);
+    }
+    setIsLoading(false);
+  };
+
   let content = <p>Found no movies.</p>;
+
   if (movies.length > 0) {
     content = <MoviesList movies={movies} />;
   }
+
   if (error) {
     content = <p>{error}</p>;
   }
+
   if (isLoading) {
     content = <p>Loading...</p>;
   }
 
-  useEffect(() => {
-    fetchMoviesHandler();
-  }, [fetchMoviesHandler]); //if fetchMoviesHandler pointer is added here it starts rerendering like crazy
-  //solution to problem, add empty array at the end of the useCallback()
   return (
     <React.Fragment>
       <section>
-        <button onClick={fetchMoviesHandler}>Fetch Movies</button>
+        <AddMovie onAddMovie={addMovieHandler} />
       </section>
       <section>
-        {content}
-        {/* {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
-        {!isLoading && movies.length === 0 && <p>No movies found...</p>}
-        {!isLoading && error && <p>{error}</p>}
-        {isLoading && <p>Loading...</p>} */}
+        <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
+      <section>{content}</section>
     </React.Fragment>
   );
 }
