@@ -12,20 +12,20 @@ function App() {
   };
 
   useEffect(() => {
-    const transformTasks = useCallback((tasksObj) => {
+    const transformTasks = (tasksObj) => {
       const loadedTasks = [];
       for (const taskKey in tasksObj) {
         loadedTasks.push({ id: taskKey, text: tasksObj[taskKey].text });
       }
       setTasks(loadedTasks);
-    });
+    };
     fetchTasks(
       {
         url: "https://react-http-cb3c6-default-rtdb.europe-west1.firebasedatabase.app/tasks.json",
       },
       transformTasks
     );
-  }, []);
+  }, [fetchTasks]);
 
   return (
     <React.Fragment>
