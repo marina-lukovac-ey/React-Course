@@ -59,18 +59,3 @@ setEnteredValue('');
 Taken from: **_[Hide JavaScript Code](https://academind.com/tutorials/hide-javascript-code)_**
 
 ---
-
-##### UserStories... ???
-
-##### useReducer kod Reduxa...
-
-##### pre 3...
-
-- Memoizacija
-
-<!-- useMemo((Cuvanje rezultata skupih funkcija...)=>{ ... },[dependencies]) vraca vrednost... -->
-
-- Handler funkcija samo treba da prosledjuje akciju... REDUX filozofija... Zbog cistine...
-- imenovanje stateova
-  isCartShown
-  shouldCartShow

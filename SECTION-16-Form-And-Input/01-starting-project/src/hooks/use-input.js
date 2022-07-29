@@ -1,23 +1,33 @@
-import { useState } from "react";
+import { useReducer } from "react";
 
-const useInput = (validator, defaultValue = "") => {
-  const [inputValue, setInputValue] = useState(defaultValue);
-  const [inputTouched, setInputTouched] = useState(false);
+const reducerInput = (state, action) => {
+  if (action.type === "TOUCH") {
+    return { inputValue: state.inputValue, inputTouched: true };
+  } else if (action.type === "TYPE") {
+    return { inputValue: action.value, inputTouched: state.inputTouched };
+  }
+  return { inputValue: "", inputTouched: false };
+};
+
+const useInput = (validator) => {
+  const [inputState, dispatchInput] = useReducer(reducerInput, {
+    inputValue: "",
+    inputTouched: false,
+  });
+
+  const { inputValue, inputTouched } = inputState;
 
   const isValid = validator(inputValue);
   const invalidInput = !isValid && inputTouched;
 
   const inputBlurChangeHandler = () => {
-    setInputTouched(true);
+    dispatchInput({ type: "TOUCH" });
   };
-
   const enteredInputChangeHandler = (e) => {
-    setInputTouched(true);
-    setInputValue(e.target.value);
+    dispatchInput({ type: "TYPE", value: e.target.value });
   };
   const resetState = () => {
-    setInputValue(defaultValue);
-    setInputTouched(false);
+    dispatchInput({ type: "RESET" });
   };
 
   const inputClasses = `form-control ${invalidInput ? "invalid" : ""}`;
